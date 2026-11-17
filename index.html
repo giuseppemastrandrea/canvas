@@ -3,110 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas – Risorse Didattiche</title>
+    <title>Canvas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
         .font-cinzel { font-family: 'Cinzel', serif; }
-        .glass-panel { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen max-w-2xl mx-auto px-6 py-16">
 
-    <!-- Header -->
-    <header class="border-b border-slate-800 bg-slate-900/90 px-6 py-5 sticky top-0 z-50 glass-panel">
-        <div class="max-w-5xl mx-auto flex items-center space-x-4">
-            <div class="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xl shadow-inner">
-                <i class="fa-solid fa-infinity"></i>
-            </div>
-            <div>
-                <h1 class="font-cinzel text-xl font-bold text-amber-300 tracking-wide">Canvas</h1>
-                <p class="text-xs text-slate-400">Risorse e Strumenti Didattici Interattivi</p>
-            </div>
-        </div>
+    <header class="mb-12">
+        <h1 class="font-cinzel text-3xl font-bold text-amber-300 mb-2">Canvas</h1>
+        <p class="text-slate-400 text-sm">Raccolta di strumenti didattici interattivi</p>
     </header>
 
-    <!-- Hero -->
-    <section class="max-w-5xl mx-auto w-full px-6 pt-16 pb-10 text-center">
-        <div class="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
-            <i class="fa-solid fa-star"></i>
-            <span>Risorse open-source per l'apprendimento</span>
-        </div>
-        <h2 class="font-cinzel text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
-            Strumenti Didattici<br>
-            <span class="text-amber-400">Interattivi</span>
-        </h2>
-        <p class="text-slate-400 text-lg max-w-xl mx-auto">
-            Una raccolta di applicazioni web pensate per rendere lo studio più efficace, coinvolgente e autonomo.
-        </p>
-    </section>
+    <ul class="space-y-3">
 
-    <!-- Cards / Projects -->
-    <main class="max-w-5xl mx-auto w-full px-6 pb-20 flex-grow">
-        <h3 class="text-xs uppercase tracking-widest font-bold text-slate-500 mb-6">Strumenti Disponibili</h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <!-- Card: Latina Syntaxis -->
-            <a href="latina_syntaxis_gioco_di_traduzione.html" class="card-hover glass-panel rounded-2xl p-6 flex flex-col space-y-4 group">
-                <div class="flex items-start justify-between">
-                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl">
-                        <i class="fa-solid fa-scroll"></i>
+        <li>
+            <a href="latina_syntaxis_gioco_di_traduzione.html"
+               class="flex items-center justify-between p-4 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-amber-500/60 hover:bg-slate-800 transition group">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-scroll text-amber-400 w-5 text-center"></i>
+                    <div>
+                        <div class="text-sm font-semibold text-slate-100 group-hover:text-amber-300 transition">Latina Syntaxis</div>
+                        <div class="text-xs text-slate-500">Palestra di traduzione col Metodo Valenziale</div>
                     </div>
-                    <span class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full">
-                        Disponibile
-                    </span>
                 </div>
-                <div>
-                    <h4 class="font-cinzel text-lg font-bold text-amber-300 group-hover:text-amber-200 transition mb-1">
-                        Latina Syntaxis
-                    </h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">
-                        Palestra di traduzione con il Metodo Valenziale. Analisi guidata di frasi latine per individuare verbo, soggetto, oggetto e termine. Ideale per il Liceo Classico.
-                    </p>
-                </div>
-                <div class="flex flex-wrap gap-2 pt-1">
-                    <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">Latino</span>
-                    <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">Sintassi</span>
-                    <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">Metodo Valenziale</span>
-                </div>
-                <div class="flex items-center text-xs text-amber-400 font-semibold pt-2">
-                    <span>Avvia l'esercizio</span>
-                    <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                </div>
+                <i class="fa-solid fa-arrow-right text-slate-600 group-hover:text-amber-400 transition"></i>
             </a>
+        </li>
 
-            <!-- Card placeholder (futuro strumento) -->
-            <div class="glass-panel rounded-2xl p-6 flex flex-col space-y-4 opacity-50 cursor-not-allowed border-dashed border-2 border-slate-700 bg-transparent">
-                <div class="flex items-start justify-between">
-                    <div class="w-12 h-12 rounded-xl bg-slate-700/40 border border-slate-600 flex items-center justify-center text-slate-500 text-2xl">
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
-                    <span class="text-xs font-semibold text-slate-500 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-full">
-                        In arrivo
-                    </span>
-                </div>
-                <div>
-                    <h4 class="font-cinzel text-lg font-bold text-slate-500 mb-1">Prossimo Strumento</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Un nuovo strumento didattico sarà presto disponibile in questa collezione.
-                    </p>
-                </div>
-            </div>
+    </ul>
 
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-4 px-6 text-center text-xs text-slate-500">
-        <span>Canvas – Risorse Didattiche</span>
-        <span class="mx-2">·</span>
-        <a href="https://github.com/giuseppemastrandrea/canvas" class="hover:text-amber-400 transition" target="_blank">
-            <i class="fa-brands fa-github mr-1"></i>GitHub
+    <footer class="mt-16 text-xs text-slate-600">
+        <a href="https://github.com/giuseppemastrandrea/canvas" target="_blank" class="hover:text-slate-400 transition">
+            <i class="fa-brands fa-github mr-1"></i>giuseppemastrandrea/canvas
         </a>
     </footer>
 
