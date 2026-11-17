@@ -1,746 +1,478 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latina Syntaxis - Il Detective delle Frasi</title>
-    <!-- Tailwind CSS -->
+    <title>Mappe Concettuali CAA - Scuola Primaria (ARASAAC)</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
+    
+    <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- html2canvas for High-Res Canvas Capture -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- jsPDF for Direct PDF Generation & Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Google Fonts: Lexend & Fredoka for High Readability in Primary School -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Lexend', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        .font-cinzel { font-family: 'Cinzel', serif; }
-        .glass-panel { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #f8fafc;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* CAA Node Card Styling & Interactivity */
+        .caa-node {
+            touch-action: none;
+            cursor: grab;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .caa-node:active {
+            cursor: grabbing;
+            box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Canvas Background Grid Patterns */
+        .bg-pattern-dots {
+            background-image: radial-gradient(#cbd5e1 1.8px, transparent 1.8px);
+            background-size: 24px 24px;
+        }
+
+        .bg-pattern-grid {
+            background-image: linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                              linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .bg-pattern-blank {
+            background-color: #ffffff;
+        }
+
+        /* Utility class to guarantee exclusion from export */
+        .no-export {
+            /* Marked for html2canvas ignoreElements */
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="h-full flex flex-col overflow-hidden text-slate-800 antialiased">
 
-    <!-- Header -->
-    <header class="border-b border-slate-800 bg-slate-900/90 px-6 py-4 sticky top-0 z-50 glass-panel">
-        <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold text-xl shadow-inner">
-                    <i class="fa-solid fa-scroll"></i>
-                </div>
-                <div>
-                    <h1 class="font-cinzel text-xl font-bold text-amber-300 tracking-wide">Latina Syntaxis</h1>
-                    <p class="text-xs text-slate-400">Palestra di Traduzione col Metodo Valenziale</p>
-                </div>
+    <!-- Top Header Bar -->
+    <header class="no-export bg-white border-b border-slate-200 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 z-30 shadow-sm shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="bg-gradient-to-tr from-sky-500 to-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+                <i class="fa-solid fa-diagram-project text-xl"></i>
             </div>
+            <div>
+                <h1 class="font-display font-bold text-lg md:text-xl text-slate-800 leading-tight flex items-center gap-2">
+                    Mappe CAA <span class="bg-sky-100 text-sky-800 text-xs px-2 py-0.5 rounded-md font-sans font-bold">ARASAAC</span>
+                </h1>
+                <p class="text-xs text-slate-500 hidden sm:block">Generatore di Mappe Concettuali con Pittogrammi per la Scuola Primaria</p>
+            </div>
+        </div>
+
+        <!-- Action Export Controls Header -->
+        <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="loadPresetAutumn()" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs sm:text-sm font-bold rounded-xl border border-amber-200 transition flex items-center gap-1.5 shadow-sm active:scale-95">
+                <i class="fa-solid fa-leaf text-amber-500"></i>
+                <span>Esempio "Autunno"</span>
+            </button>
             
-            <div class="flex items-center space-x-4">
-                <button onclick="openCreatorModal()" class="px-3.5 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30 text-xs font-semibold flex items-center space-x-1.5 transition">
-                    <i class="fa-solid fa-plus-circle"></i>
-                    <span>Aggiungi Frase</span>
-                </button>
-                <div class="text-right">
-                    <span class="text-[10px] text-slate-400 block uppercase font-bold tracking-wider">Punteggio</span>
-                    <span id="score-display" class="text-xl font-bold text-amber-400">0</span>
-                </div>
-                <div class="text-right">
-                    <span class="text-[10px] text-slate-400 block uppercase font-bold tracking-wider">Frase</span>
-                    <span id="level-display" class="text-base font-bold text-slate-200">1 / 1</span>
-                </div>
-            </div>
+            <button onclick="downloadPDF()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow transition flex items-center gap-1.5 active:scale-95">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Scarica PDF</span>
+            </button>
+
+            <button onclick="exportToPNG()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow transition flex items-center gap-1.5 active:scale-95">
+                <i class="fa-solid fa-file-image"></i>
+                <span>Scarica PNG</span>
+            </button>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto w-full p-4 md:p-6 flex-grow flex flex-col justify-center">
+    <!-- Main Application Container -->
+    <div id="app-root" class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
 
-        <!-- Game Card -->
-        <div id="game-card" class="glass-panel rounded-2xl p-5 md:p-8 shadow-2xl relative">
+        <!-- Sidebar Panel -->
+        <aside class="no-export w-full md:w-80 lg:w-96 bg-white border-r border-slate-200 flex flex-col shrink-0 z-20 shadow-md h-auto md:h-full max-h-[48vh] md:max-h-none overflow-y-auto">
             
-            <!-- Progress Bar -->
-            <div class="w-full bg-slate-800 h-2 rounded-full mb-6 overflow-hidden">
-                <div id="progress-bar" class="bg-amber-500 h-full w-0 transition-all duration-500"></div>
-            </div>
-
-            <!-- Top Controls -->
-            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <span id="step-badge" class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-indigo-950 text-indigo-300 border border-indigo-800">
-                    Fase 1: Il Verbo
-                </span>
-                <div class="flex items-center space-x-2">
-                    <button onclick="showHint()" class="text-xs text-amber-400 hover:text-amber-300 flex items-center space-x-1 bg-amber-950/40 border border-amber-800/60 px-3 py-1.5 rounded-lg transition">
-                        <i class="fa-solid fa-book-bookmark"></i> <span>Dizionario / Aiuto</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Latin Sentence Display -->
-            <div class="bg-slate-900/90 rounded-xl p-5 border border-slate-700/60 mb-6 text-center">
-                <p class="text-xs uppercase tracking-widest text-slate-400 mb-2 font-semibold">Frase Latina da analizzare:</p>
-                <p id="latin-sentence-display" class="text-xl md:text-2xl font-cinzel font-bold text-amber-200 tracking-wide select-all py-2"></p>
-            </div>
-
-            <!-- Grammatical Reference Card (Displayed only for Frase 1) -->
-            <div id="grammar-helper" class="mb-6 p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 leading-relaxed">
-                <!-- Helper text injected per step -->
-            </div>
-
-            <!-- Step Interactive Content -->
-            <div id="step-container" class="space-y-4">
-                <!-- Step questions rendered here -->
-            </div>
-
-            <!-- Feedback Message -->
-            <div id="feedback-box" class="hidden mt-6 p-4 rounded-xl text-sm font-medium transition-all"></div>
-
-            <!-- Action Navigation -->
-            <div class="mt-6 flex justify-between items-center border-t border-slate-800 pt-5">
-                <button id="prev-btn" onclick="previousStep()" class="hidden px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition text-xs font-semibold">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Precedente
+            <!-- Navigation Tabs -->
+            <div class="flex border-b border-slate-200 bg-slate-50 sticky top-0 z-10">
+                <button id="tab-btn-content" onclick="switchSidebarTab('content')" class="flex-1 py-3 px-4 text-xs font-bold uppercase tracking-wider text-sky-600 border-b-2 border-sky-600 flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-pen-to-square"></i> Contenuti
                 </button>
-                <div class="ml-auto flex space-x-3">
-                    <button id="check-btn" onclick="checkCurrentStep()" class="px-6 py-2.5 rounded-xl bg-amber-500 text-slate-950 hover:bg-amber-400 transition font-bold text-sm shadow-lg shadow-amber-500/20">
-                        Verifica Risposta <i class="fa-solid fa-check ml-1"></i>
-                    </button>
-                    <button id="next-btn" onclick="nextStep()" class="hidden px-6 py-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500 transition font-bold text-sm shadow-lg shadow-emerald-600/20">
-                        Passaggio Successivo <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </button>
-                    <button id="next-case-btn" onclick="loadNextCase()" class="hidden px-6 py-2.5 rounded-xl bg-amber-500 text-slate-950 hover:bg-amber-400 transition font-bold text-sm shadow-lg shadow-amber-500/20">
-                        Prossima Frase <i class="fa-solid fa-trophy ml-1"></i>
-                    </button>
+                <button id="tab-btn-style" onclick="switchSidebarTab('style')" class="flex-1 py-3 px-4 text-xs font-bold uppercase tracking-wider text-slate-500 border-b-2 border-transparent hover:text-slate-700 flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-sliders"></i> Personalizza
+                </button>
+            </div>
+
+            <!-- TAB 1: CONTENT CREATION -->
+            <div id="tab-content" class="p-4 space-y-4 flex-1">
+                
+                <!-- Central Concept Input -->
+                <div class="space-y-1.5">
+                    <label for="input-central" class="block text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-dot text-amber-500"></i> Concetto Centrale
+                    </label>
+                    <input type="text" id="input-central" value="autunno" placeholder="Es. autunno" 
+                        class="w-full px-3.5 py-2.5 border-2 border-slate-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-xl text-slate-900 font-bold uppercase transition outline-none">
+                    <p class="text-[11px] text-slate-400">La parola principale collocata al centro della mappa.</p>
+                </div>
+
+                <!-- Peripheral Concepts Input -->
+                <div class="space-y-1.5">
+                    <label for="input-peripheral" class="block text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <i class="fa-solid fa-diagram-nested text-sky-500"></i> Concetti Periferici (1 per riga)
+                    </label>
+                    <textarea id="input-peripheral" rows="6" placeholder="foglia&#10;castagna&#10;pioggia&#10;ombrello&#10;fungo&#10;uva&#10;vento&#10;scoiattolo"
+                        class="w-full px-3.5 py-2.5 border-2 border-slate-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-xl text-slate-900 font-medium transition outline-none resize-none leading-relaxed">foglia
+castagna
+pioggia
+ombrello
+fungo
+uva
+vento
+scoiattolo</textarea>
+                    <p class="text-[11px] text-slate-400">Ogni riga diventerà un nodo collegato al centro.</p>
+                </div>
+
+                <!-- Primary Generate Action Button -->
+                <button id="btn-generate" onclick="handleGenerateClick()" class="w-full py-3.5 bg-[#f97316] hover:bg-[#ea580c] text-white font-bold text-sm rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/40 transition-all flex items-center justify-center gap-2 active:scale-98">
+                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                    <span>Genera mappa concettuale</span>
+                </button>
+
+                <!-- Worksheet Header Checkbox -->
+                <div class="pt-3 border-t border-slate-200 space-y-2">
+                    <label class="flex items-center gap-2.5 cursor-pointer">
+                        <input type="checkbox" id="check-worksheet-header" onchange="toggleWorksheetHeader()" class="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                        <span class="text-xs font-bold text-slate-700">Intestazione Scheda Didattica (Nome, Data, Classe)</span>
+                    </label>
+                </div>
+
+            </div>
+
+            <!-- TAB 2: STYLING OPTIONS -->
+            <div id="tab-style" class="p-4 space-y-5 hidden flex-1">
+                
+                <!-- Pictogram Size Selector -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-image text-indigo-500"></i> Dimensione Pittogrammi
+                    </label>
+                    <div class="grid grid-cols-4 gap-1.5">
+                        <button onclick="setNodeSize('sm')" id="btn-size-sm" class="btn-size py-2 border rounded-xl text-xs font-bold hover:bg-slate-100 text-slate-700 text-center">Piccolo</button>
+                        <button onclick="setNodeSize('md')" id="btn-size-md" class="btn-size py-2 border border-sky-500 bg-sky-50 text-sky-700 rounded-xl text-xs font-bold text-center">Medio</button>
+                        <button onclick="setNodeSize('lg')" id="btn-size-lg" class="btn-size py-2 border rounded-xl text-xs font-bold hover:bg-slate-100 text-slate-700 text-center">Grande</button>
+                        <button onclick="setNodeSize('xl')" id="btn-size-xl" class="btn-size py-2 border rounded-xl text-xs font-bold hover:bg-slate-100 text-slate-700 text-center">XL</button>
+                    </div>
+                </div>
+
+                <!-- Text Font Size -->
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="text-xs font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-font text-indigo-500"></i> Dimensione Testo
+                        </label>
+                        <span id="text-size-label" class="text-xs font-bold text-sky-600">18px</span>
+                    </div>
+                    <input type="range" id="range-text-size" min="12" max="28" value="18" oninput="updateTextSize(this.value)" class="w-full accent-sky-600 cursor-pointer">
+                </div>
+
+                <!-- Radial Circle Radius -->
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="text-xs font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrows-spin text-indigo-500"></i> Raggio Distribuzione
+                        </label>
+                        <span id="radius-label" class="text-xs font-bold text-sky-600">230px</span>
+                    </div>
+                    <input type="range" id="range-radius" min="140" max="380" value="230" oninput="updateRadius(this.value)" class="w-full accent-sky-600 cursor-pointer">
+                </div>
+
+                <!-- Lines Customization -->
+                <div class="space-y-3 pt-3 border-t border-slate-200">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wide">Linee di Collegamento</h4>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-600 font-semibold">Spessore Linee</span>
+                        <input type="range" id="range-line-width" min="1" max="8" value="3" oninput="updateLineStyles()" class="w-28 accent-sky-600">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-600 font-semibold">Colore Linee</span>
+                        <input type="color" id="picker-line-color" value="#0284c7" onchange="updateLineStyles()" class="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-600 font-semibold">Stile Tratto</span>
+                        <select id="select-line-dash" onchange="updateLineStyles()" class="text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 font-semibold">
+                            <option value="solid">Continua</option>
+                            <option value="dashed">Tratteggiata</option>
+                            <option value="dotted">Puntinata</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Colors & Canvas Style -->
+                <div class="space-y-3 pt-3 border-t border-slate-200">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wide">Colori e Sfondo</h4>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-600 font-semibold">Sfondo Centro</span>
+                        <input type="color" id="picker-center-bg" value="#fef08a" onchange="updateNodeColors()" class="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-600 font-semibold">Sfondo Nodi</span>
+                        <input type="color" id="picker-node-bg" value="#ffffff" onchange="updateNodeColors()" class="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-600 font-semibold">Bordo Nodi</span>
+                        <input type="color" id="picker-node-border" value="#0284c7" onchange="updateNodeColors()" class="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-600 font-semibold">Griglia Workspace</span>
+                        <select id="select-bg-pattern" onchange="setCanvasBackground(this.value)" class="text-xs border border-slate-300 rounded-lg px-2 py-1.5 font-semibold">
+                            <option value="dots">Puntinata</option>
+                            <option value="grid">Quadretti</option>
+                            <option value="blank">Bianco</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Reset Radial Positions -->
+                <button onclick="repositionNodesRadially()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-300 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right text-slate-500"></i> Ripristina Posizioni Cerchio
+                </button>
+
+            </div>
+        </aside>
+
+        <!-- Interactive Workspace Area -->
+        <main id="workspace-wrapper" class="flex-1 bg-slate-100 relative overflow-hidden flex flex-col bg-pattern-dots">
+            
+            <!-- Canvas Floating Controls Toolbar (Ignored on Export) -->
+            <div class="no-export absolute top-3 right-3 z-20 bg-white/90 backdrop-blur rounded-2xl shadow-md border border-slate-200 p-1 flex items-center gap-1">
+                <button onclick="zoomCanvas(0.1)" title="Zoom In" class="p-2 hover:bg-slate-100 rounded-xl text-slate-700 transition active:scale-90">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </button>
+                <button onclick="zoomCanvas(-0.1)" title="Zoom Out" class="p-2 hover:bg-slate-100 rounded-xl text-slate-700 transition active:scale-90">
+                    <i class="fa-solid fa-magnifying-glass-minus"></i>
+                </button>
+                <button onclick="resetZoomAndCenter()" title="Ripristina Zoom e Centra" class="px-2.5 py-1 hover:bg-slate-100 rounded-xl text-slate-700 transition text-xs font-extrabold">
+                    100%
+                </button>
+            </div>
+
+            <!-- THIS IS THE EXACT CONTAINER CAPTURED FOR PDF & PNG EXPORT -->
+            <div id="map-export-area" class="w-full h-full relative flex flex-col bg-transparent">
+                
+                <!-- Optional Worksheet Printable Header -->
+                <div id="worksheet-header" class="hidden p-6 pb-2 max-w-5xl mx-auto w-full border-b-2 border-slate-900 mb-2 shrink-0">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h2 class="font-display font-extrabold text-2xl text-slate-900 uppercase tracking-wide" id="worksheet-title">MAPPA CONCETTUALE CAA</h2>
+                            <p class="text-xs text-slate-600 font-semibold">Materiale Didattico Scuola Primaria - Simboli ARASAAC</p>
+                        </div>
+                        <div class="text-right space-y-1 font-bold text-xs md:text-sm">
+                            <div>NOME: __________________________</div>
+                            <div>DATA: ____________ CLASSE: _____</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Stage Area -->
+                <div id="stage-viewport" class="flex-1 relative w-full h-full overflow-hidden">
+                    
+                    <!-- Scalable Transform Container -->
+                    <div id="canvas-stage" class="absolute inset-0 origin-center transition-transform duration-75">
+                        
+                        <!-- SVG Overlay for Connecting Lines -->
+                        <svg id="svg-lines" class="absolute inset-0 w-full h-full pointer-events-none z-0">
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7" />
+                                </marker>
+                            </defs>
+                        </svg>
+
+                        <!-- Dynamic Nodes Container -->
+                        <div id="nodes-layer" class="absolute inset-0 z-10">
+                            <!-- DOM Nodes rendered here -->
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
 
-        </div>
-
-    </main>
-
-    <!-- Modal: Dictionary Hint -->
-    <div id="hint-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
-            <button onclick="closeHint()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            <div class="flex items-center space-x-3 mb-4 text-amber-400">
-                <i class="fa-solid fa-book-bookmark text-2xl"></i>
-                <h3 class="font-cinzel text-lg font-bold">Consultazione Dizionario</h3>
+            <!-- Drag Hint -->
+            <div class="no-export absolute bottom-3 left-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-600 shadow-sm flex items-center gap-2 pointer-events-none">
+                <i class="fa-solid fa-hand-pointer text-sky-500"></i>
+                <span>Trascina i nodi liberamente. Clicca un nodo per modificare il pittogramma.</span>
             </div>
-            <div id="hint-content" class="text-sm text-slate-300 space-y-3 leading-relaxed">
-                <!-- Injected content -->
+        </main>
+    </div>
+
+    <!-- ARASAAC Pictogram Switcher Modal (Ignored on Export) -->
+    <div id="modal-pictogram" class="no-export fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150">
+            
+            <!-- Modal Header -->
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-icons text-sky-600"></i> Modifica Pittogramma
+                    </h3>
+                    <p class="text-xs text-slate-500">Seleziona un'immagine alternativa per: <span id="modal-node-title" class="font-bold uppercase text-sky-700">PAROLA</span></p>
+                </div>
+                <button onclick="closePictogramModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
             </div>
-            <button onclick="closeHint()" class="w-full mt-6 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold">
-                Ho capito!
-            </button>
+
+            <!-- Modal Search Controls -->
+            <div class="p-4 border-b border-slate-100 bg-white">
+                <form onsubmit="handleModalSearchSubmit(event)" class="flex gap-2">
+                    <input type="text" id="modal-search-input" placeholder="Cerca altra parola..." class="flex-1 px-3.5 py-2 border-2 border-slate-300 rounded-xl text-sm font-bold uppercase focus:border-sky-500 outline-none">
+                    <button type="submit" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-sm font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Cerca</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Modal Pictogram Grid Results -->
+            <div id="modal-results-grid" class="p-4 overflow-y-auto flex-1 grid grid-cols-3 sm:grid-cols-4 gap-3 min-h-[200px]">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="p-3.5 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs">
+                <button onclick="clearNodeImage()" class="text-slate-500 hover:text-red-600 font-bold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-eye-slash"></i> Nascondi Immagine (Solo Testo)
+                </button>
+                <button onclick="closePictogramModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition">
+                    Chiudi
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Modal: Creator / Add Sentence -->
-    <div id="creator-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl my-8">
-            <button onclick="closeCreatorModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            <div class="flex items-center space-x-3 mb-6 text-amber-400">
-                <i class="fa-solid fa-pen-to-square text-2xl"></i>
-                <div>
-                    <h3 class="font-cinzel text-xl font-bold">Aggiungi Nuova Frase</h3>
-                    <p class="text-xs text-slate-400">Inserisci i dati per l'analisi valenziale e le domande sui casi</p>
-                </div>
+    <!-- GLOBAL LOADING OVERLAY (Strictly placed OUTSIDE export area with class no-export) -->
+    <div id="global-loading-overlay" class="no-export pdf-loader hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white pointer-events-auto">
+        <div class="bg-white text-slate-800 p-6 rounded-2xl shadow-2xl flex flex-col items-center gap-3 max-w-xs text-center border border-slate-100">
+            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-600"></i>
+            <div>
+                <h4 class="font-bold text-base text-slate-800" id="loading-title">Elaborazione in corso</h4>
+                <p class="text-xs text-slate-500 mt-1" id="loading-subtitle">Un attimo di pazienza...</p>
             </div>
-
-            <form id="creator-form" onsubmit="saveCustomSentence(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Frase Latina Completa:</label>
-                    <input type="text" id="custom-latin" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-amber-200 focus:outline-none focus:border-amber-500" placeholder="Es. Discipulae sedulae epistulam magistrae mittunt.">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Parola Verbo nel testo:</label>
-                        <input type="text" id="custom-pv" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200" placeholder="mittunt">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Paradigma del Verbo per esteso:</label>
-                        <input type="text" id="custom-pv-decl" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200" placeholder="mitto, mittis, misi, missum, mittere">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-blue-400 mb-1">Soggetto A1 (parola e declinazione per esteso):</label>
-                        <input type="text" id="custom-a1" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 mb-2" placeholder="Discipulae">
-                        <input type="text" id="custom-a1-decl" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-300" placeholder="discipula, discipulae">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-emerald-400 mb-1">Oggetto A2 (parola e declinazione):</label>
-                        <input type="text" id="custom-a2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 mb-2" placeholder="epistulam (se assente inserisci 'nessuno')">
-                        <input type="text" id="custom-a2-decl" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-300" placeholder="epistula, epistulae">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-amber-400 mb-1">Termine A3 (parola e declinazione):</label>
-                        <input type="text" id="custom-a3" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 mb-2" placeholder="magistrae (se assente inserisci 'nessuno')">
-                        <input type="text" id="custom-a3-decl" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-300" placeholder="magistra, magistrae">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Traduzione Italiana Finale:</label>
-                    <input type="text" id="custom-translation" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200" placeholder="Le diligenti alunne inviano una lettera alla maestra.">
-                </div>
-
-                <div class="border-t border-slate-800 pt-3">
-                    <label class="block text-xs font-semibold text-indigo-300 mb-1">Domanda sui Casi di Fine Frase:</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input type="text" id="custom-case-q" required class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200" placeholder="Es. Come si traduce 'discipularum'?">
-                        <input type="text" id="custom-case-a" required class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200" placeholder="Es. delle alunne">
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center pt-3 border-t border-slate-800">
-                    <button type="button" onclick="resetToDefaultCases()" class="text-xs text-rose-400 hover:text-rose-300">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Ripristina Frasi Predefinite
-                    </button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm hover:bg-amber-400">
-                        Salva Frase <i class="fa-solid fa-save ml-1"></i>
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-3 px-6 text-center text-xs text-slate-500">
-        Latina Syntaxis &copy; Metodo Valenziale - Liceo Classico
-    </footer>
 
     <script>
-        // Database con frasi ed esercizio sui casi a fine frase
-        const defaultCases = [
-            {
-                id: 1,
-                latin: "Discipulae sedulae epistulam magistrae mittunt.",
-                pv: "mittunt",
-                pvDecl: "mitto, mittis, misi, missum, mittere",
-                a1: "Discipulae",
-                a1Case: "Nominativo",
-                a1Decl: "discipula, discipulae",
-                a2: "epistulam",
-                a2Case: "Accusativo",
-                a2Decl: "epistula, epistulae",
-                a3: "magistrae",
-                a3Case: "Dativo",
-                a3Decl: "magistra, magistrae",
-                dictionary: `
-                    <strong>mitto, -is, misi, missum, -ere</strong>: inviare.<br>
-                    <strong>discipula, -ae</strong> (f.): alunna.<br>
-                    <strong>sedulus, -a, -um</strong>: diligente.<br>
-                    <strong>epistula, -ae</strong> (f.): lettera.<br>
-                    <strong>magistra, -ae</strong> (f.): maestra.
-                `,
-                translation: "Le diligenti alunne inviano una lettera alla maestra.",
-                caseQuestions: [
-                    {
-                        question: "Come si traduce la parola 'discipularum' (Genitivo plurale)?",
-                        answer: "delle alunne"
-                    },
-                    {
-                        question: "A quale caso si trova la parola 'magistrae' in questa frase?",
-                        answer: "dativo"
-                    }
-                ]
-            },
-            {
-                id: 2,
-                latin: "Invidia Marco nocet.",
-                pv: "nocet",
-                pvDecl: "noceo, noces, nocui, nocitum, nocere",
-                a1: "Invidia",
-                a1Case: "Nominativo",
-                a1Decl: "invidia, invidiae",
-                a2: "nessuno",
-                a2Case: "-",
-                a2Decl: "-",
-                a3: "Marco",
-                a3Case: "Dativo",
-                a3Decl: "Marcus, Marci",
-                dictionary: `
-                    <strong>noceo, -es, nocui, nocitum, -ere (+ dat.)</strong>: nuocere a, danneggiare.<br>
-                    <em>REGGENZA:</em> Regge il DATIVO (alicui)! In italiano si traduce come Complemento Oggetto.<br>
-                    <strong>invidia, -ae</strong> (f.): invidia.<br>
-                    <strong>Marcus, -i</strong> (m.): Marco.
-                `,
-                translation: "L'invidia danneggia Marco.",
-                caseQuestions: [
-                    {
-                        question: "In che caso è la parola 'Marco' e qual è il suo nominativo singolare?",
-                        answer: "dativo, marcus"
-                    }
-                ]
-            },
-            {
-                id: 3,
-                latin: "Poetae claris templis pulchra dona praebent.",
-                pv: "praebent",
-                pvDecl: "praebo, praebes, praebui, praebitum, praebere",
-                a1: "Poetae",
-                a1Case: "Nominativo",
-                a1Decl: "poeta, poetae",
-                a2: "dona",
-                a2Case: "Accusativo",
-                a2Decl: "donum, doni",
-                a3: "templis",
-                a3Case: "Dativo",
-                a3Decl: "templum, templi",
-                dictionary: `
-                    <strong>praebo, -es, praebui, praebitum, -ere</strong>: offrire.<br>
-                    <strong>poeta, -ae</strong> (m.): poeta.<br>
-                    <strong>templum, -i</strong> (NEUTRO 2ª decl.): tempio.<br>
-                    <strong>donum, -i</strong> (NEUTRO 2ª decl.): dono.
-                `,
-                translation: "I poeti offrono bei doni ai famosi templi.",
-                caseQuestions: [
-                    {
-                        question: "Perché la parola 'dona' esce in -A anche se è un complemento oggetto (Accusativo plurale)?",
-                        answer: "perche e neutro"
-                    }
-                ]
-            }
-        ];
-
-        let cases = [];
-        let currentCaseIdx = 0;
-        let currentStepIdx = 0;
-        let score = 0;
-
-        window.onload = function() {
-            loadDatabase();
-            loadCase(0);
+        // Global Application State
+        const state = {
+            centralConcept: 'autunno',
+            peripheralConcepts: ['foglia', 'castagna', 'pioggia', 'ombrello', 'fungo', 'uva', 'vento', 'scoiattolo'],
+            nodes: [], // { id, text, arasaacId, base64Url, x, y, isCenter }
+            nodeSize: 'md', // sm, md, lg
+            textSize: 18,
+            radius: 230,
+            lineColor: '#0284c7',
+            lineWidth: 3,
+            lineDash: 'solid',
+            centerBg: '#fef08a',
+            nodeBg: '#ffffff',
+            nodeBorder: '#0284c7',
+            zoom: 1.0,
+            activeModalNodeId: null
         };
 
-        function loadDatabase() {
-            const saved = localStorage.getItem("latina_cases_db_v2");
-            if (saved) {
-                try {
-                    cases = JSON.parse(saved);
-                } catch(e) {
-                    cases = [...defaultCases];
-                }
-            } else {
-                cases = [...defaultCases];
-            }
-        }
+        // Size Presets configuration
+        const SIZE_CONFIGS = {
+            sm: { imgSize: 65, boxPadding: '10px' },
+            md: { imgSize: 95, boxPadding: '14px' },
+            lg: { imgSize: 130, boxPadding: '18px' },
+            xl: { imgSize: 165, boxPadding: '22px' }
+        };
 
-        function saveDatabase() {
-            localStorage.setItem("latina_cases_db_v2", JSON.stringify(cases));
-        }
+        // In-memory Cache for API responses and Base64 images
+// ... existing code ... -->
+            const config = SIZE_CONFIGS[state.nodeSize];
+            const bgColor = node.isCenter ? state.centerBg : state.nodeBg;
+            const borderColor = node.isCenter ? '#d97706' : state.nodeBorder;
 
-        function resetToDefaultCases() {
-            if (confirm("Vuoi ripristinare le frasi predefinite? Le frasi aggiunte verranno cancellate.")) {
-                cases = [...defaultCases];
-                saveDatabase();
-                closeCreatorModal();
-                loadCase(0);
-            }
-        }
-
-        function loadCase(idx) {
-            if (idx >= cases.length) idx = 0;
-            currentCaseIdx = idx;
-            currentStepIdx = 0;
-            
-            const cData = cases[currentCaseIdx];
-            document.getElementById("level-display").innerText = `${currentCaseIdx + 1} / ${cases.length}`;
-            document.getElementById("latin-sentence-display").innerText = cData.latin;
-
-            renderStep();
-            updateProgressBar();
-        }
-
-        function getStepDefinition(stepIdx, cData) {
-            const isFirstSentence = (currentCaseIdx === 0);
-
-            switch(stepIdx) {
-                case 0: // FASE 1: VERBO
-                    return {
-                        title: "Fase 1: Individuazione del Verbo (PV)",
-                        badge: "Fase 1: Verbo",
-                        helper: isFirstSentence ? `
-                            <strong class="text-amber-300">COME SI TROVA IL VERBO (Solo Frase 1):</strong><br>
-                            1. Trova la voce verbale nella frase latina e scrivila nel primo campo.<br>
-                            2. <strong>Sul Dizionario:</strong> Ricorda che i verbi si cercano alla 1ª persona singolare dell'Indicativo Presente (in <strong>-O</strong>).<br>
-                            3. Nel secondo campo scrivi il <strong>paradigma completo per esteso</strong> (es. <em>paro, paras, paravi, paratum, parare</em>).
-                        ` : `<span class="text-slate-400 italic">Ora che conosci la regola, individua autonomamente il verbo e risali al suo paradigma sul dizionario!</span>`,
-                        questions: "verbo"
-                    };
-
-                case 1: // FASE 2: A1 SOGGETTO
-                    return {
-                        title: "Fase 2: Argomento A1 - Il Soggetto",
-                        badge: "Fase 2: A1 Soggetto",
-                        helper: isFirstSentence ? `
-                            <strong class="text-blue-300">COME SI TROVA A1 - SOGGETTO (Solo Frase 1):</strong><br>
-                            • Concords sempre col verbo e si trova al caso <strong>NOMINATIVO</strong>.<br>
-                            • 1ª Declinazione: Singolare in <code>-a</code> | Plurale in <code>-ae</code><br>
-                            • 2ª Declinazione Maschile: <code>-us / -er</code> (Sing) | <code>-i</code> (Plur)<br>
-                            • 2ª Declinazione NEUTRO: <code>-um</code> (Sing) | <code>-a</code> (Plur)<br>
-                            • Scrivi nel box il caso (Nominativo) e il nominativo/genitivo per esteso (es. <em>rosa, rosae</em>).
-                        ` : `<span class="text-slate-400 italic">Individua la parola che fa da Soggetto (A1), indica il suo caso grammaticale e la sua forma base per esteso.</span>`,
-                        questions: "a1"
-                    };
-
-                case 2: // FASE 3: A2 OGGETTO
-                    return {
-                        title: "Fase 3: Argomento A2 - Complemento Oggetto",
-                        badge: "Fase 3: A2 Oggetto",
-                        helper: isFirstSentence ? `
-                            <strong class="text-emerald-300">COME SI TROVA A2 - COMPLEMENTO OGGETTO (Solo Frase 1):</strong><br>
-                            • Risponde a <em>Chi? Che cosa?</em> e si trova in <strong>ACCUSATIVO</strong>.<br>
-                            • 1ª Declinazione: <code>-am</code> (Sing) | <code>-as</code> (Plur)<br>
-                            • 2ª Declinazione M/F: <code>-um</code> (Sing) | <code>-os</code> (Plur)<br>
-                            • 2ª Declinazione NEUTRO: <code>-um</code> (Sing) | <code>-a</code> (Plur)<br>
-                            • Se la frase non ha l'oggetto, scrivi <code>nessuno</code>.
-                        ` : `<span class="text-slate-400 italic">Cerca l'eventuale Argomento A2 in Accusativo. Se assente, scrivi 'nessuno'.</span>`,
-                        questions: "a2"
-                    };
-
-                case 3: // FASE 4: A3 TERMINE
-                    return {
-                        title: "Fase 4: Argomento A3 - Complemento di Termine / Reggenza",
-                        badge: "Fase 4: A3 Termine",
-                        helper: isFirstSentence ? `
-                            <strong class="text-amber-300">COME SI TROVA A3 - TERMINE (Solo Frase 1):</strong><br>
-                            • Risponde a <em>A chi? A che cosa?</em> e si trova in <strong>DATIVO</strong> (es. <code>-ae</code> / <code>-o</code> / <code>-is</code>) oppure è richiesto dalla reggenza del verbo (<code>+ dat.</code>).
-                        ` : `<span class="text-slate-400 italic">Individua l'eventuale Argomento A3 in Dativo. Se assente, scrivi 'nessuno'.</span>`,
-                        questions: "a3"
-                    };
-
-                case 4: // FASE 5: TRADUZIONE FINALE
-                    return {
-                        title: "Fase 5: Traduzione Finale Italiana",
-                        badge: "Fase 5: Traduzione",
-                        helper: `
-                            <strong class="text-indigo-300">ORDINE LOGICO:</strong> <code>[ A1 (Soggetto) ]</code> $\\rightarrow$ <code>[ PV (Verbo) ]</code> $\\rightarrow$ <code>[ A2 (Oggetto) ]</code> $\\rightarrow$ <code>[ A3 (Termine) ]</code>
-                        `,
-                        questions: "traduzione"
-                    };
-
-                case 5: // FASE 6: ESERCIZIO SUI CASI (MINI-TEST FINALE)
-                    return {
-                        title: "Fase 6: Mini-Test sui Casi della Frase",
-                        badge: "Fase 6: Esercizio Casi",
-                        helper: `
-                            <strong class="text-amber-400">ESERCIZIO SULLE FORME FLESSIVE:</strong><br>
-                            Rispondi alle domande sui casi e sulle forme delle parole presenti in questa frase per consolidare la conoscenza della declinazione!
-                        `,
-                        questions: "casi-test"
-                    };
-            }
-        }
-
-        function renderStep() {
-            const cData = cases[currentCaseIdx];
-            const stepDef = getStepDefinition(currentStepIdx, cData);
-            const container = document.getElementById("step-container");
-            
-            document.getElementById("step-badge").innerText = stepDef.badge;
-            document.getElementById("grammar-helper").innerHTML = stepDef.helper;
-
-            hideFeedback();
-
-            // Navigation Controls
-            document.getElementById("prev-btn").classList.toggle("hidden", currentStepIdx === 0);
-            document.getElementById("check-btn").classList.remove("hidden");
-            document.getElementById("next-btn").classList.add("hidden");
-            document.getElementById("next-case-btn").classList.add("hidden");
-
-            let html = `
-                <div class="border-b border-slate-800 pb-2">
-                    <h3 class="font-cinzel text-lg font-bold text-amber-300">${stepDef.title}</h3>
-                </div>
-            `;
-
-            if (stepDef.questions === "verbo") {
-                html += `
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">1. Scrivi la parola del VERBO presente nella frase latina:</label>
-                            <input type="text" id="input-pv" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-amber-300 focus:outline-none focus:border-amber-500" placeholder="Es. mittunt">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">2. Scrivi il PARADIGMA COMPLETO del verbo per esteso (es. rosa, rosae per i nomi o parare per i verbi):</label>
-                            <input type="text" id="input-pv-decl" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-pink-300 bg-pink-950/20 border-pink-800 focus:outline-none focus:border-pink-500" placeholder="Es. mitto, mittis, misi, missum, mittere">
-                        </div>
-                    </div>
-                `;
-            } else if (stepDef.questions === "a1") {
-                html += `
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-blue-300 mb-1">1. Scrivi la parola che fa da SOGGETTO (A1):</label>
-                            <input type="text" id="input-a1" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-blue-200 focus:outline-none focus:border-blue-500" placeholder="Es. Discipulae">
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">2. In quale CASO si trova?</label>
-                                <input type="text" id="input-a1-case" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200" placeholder="Es. Nominativo">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-pink-300 mb-1">3. Forma base per esteso (es. rosa, rosae):</label>
-                                <input type="text" id="input-a1-decl" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-pink-300 bg-pink-950/20 border-pink-800" placeholder="Es. discipula, discipulae">
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (stepDef.questions === "a2") {
-                html += `
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-emerald-300 mb-1">1. Scrivi la parola del COMPLEMENTO OGGETTO (A2) (oppure 'nessuno'):</label>
-                            <input type="text" id="input-a2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-emerald-200 focus:outline-none focus:border-emerald-500" placeholder="Es. epistulam o nessuno">
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">2. In quale CASO si trova?</label>
-                                <input type="text" id="input-a2-case" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200" placeholder="Es. Accusativo o -">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-pink-300 mb-1">3. Forma base per esteso (es. rosa, rosae):</label>
-                                <input type="text" id="input-a2-decl" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-pink-300 bg-pink-950/20 border-pink-800" placeholder="Es. epistula, epistulae">
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (stepDef.questions === "a3") {
-                html += `
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-amber-300 mb-1">1. Scrivi la parola del COMPLEMENTO DI TERMINE (A3) (oppure 'nessuno'):</label>
-                            <input type="text" id="input-a3" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-amber-200 focus:outline-none focus:border-amber-500" placeholder="Es. magistrae o nessuno">
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">2. In quale CASO si trova?</label>
-                                <input type="text" id="input-a3-case" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200" placeholder="Es. Dativo o -">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-pink-300 mb-1">3. Forma base per esteso (es. rosa, rosae):</label>
-                                <input type="text" id="input-a3-decl" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-pink-300 bg-pink-950/20 border-pink-800" placeholder="Es. magistra, magistrae">
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (stepDef.questions === "traduzione") {
-                html += `
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 space-y-3">
-                        <label class="block text-xs font-semibold text-slate-200 mb-1">Scrivi o seleziona la traduzione italiana corretta della frase:</label>
-                        <input type="text" id="input-translation" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-amber-200 focus:outline-none focus:border-amber-500" placeholder="Scrivi qui la traduzione italiana intera...">
-                    </div>
-                `;
-            } else if (stepDef.questions === "casi-test") {
-                const qList = cData.caseQuestions || [
-                    { question: `Come si traduce la prima parola della frase ('${cData.a1}')?`, answer: cData.a1 }
-                ];
-
-                html += `<div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 space-y-4">`;
-                qList.forEach((qObj, qIdx) => {
-                    html += `
-                        <div>
-                            <label class="block text-xs font-semibold text-amber-300 mb-1">${qIdx + 1}. ${qObj.question}</label>
-                            <input type="text" id="input-case-test-${qIdx}" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500" placeholder="Rispondi qui...">
-                        </div>
-                    `;
-                });
-                html += `</div>`;
-            }
-
-            container.innerHTML = html;
-        }
-
-        function checkCurrentStep() {
-            const cData = cases[currentCaseIdx];
-            let isOk = false;
-
-            if (currentStepIdx === 0) { // VERBO
-                const pvVal = document.getElementById("input-pv").value.trim().toLowerCase();
-                const pvDeclVal = document.getElementById("input-pv-decl").value.trim().toLowerCase();
-
-                if (pvVal === cData.pv.toLowerCase() && pvDeclVal.length > 3) {
-                    isOk = true;
+            el.style.backgroundColor = bgColor;
+// ... existing code ... -->
+        function setNodeSize(size) {
+            state.nodeSize = size;
+            ['sm', 'md', 'lg', 'xl'].forEach(s => {
+                const btn = document.getElementById(`btn-size-${s}`);
+                if (s === size) {
+                    btn.className = "btn-size py-2 border border-sky-500 bg-sky-50 text-sky-700 rounded-xl text-xs font-bold text-center";
                 } else {
-                    showFeedback(`Controlla di aver scritto la parola del verbo corretta ("${cData.pv}") e di aver inserito il paradigma per esteso nel riquadro rosa!`, false);
+                    btn.className = "btn-size py-2 border rounded-xl text-xs font-bold hover:bg-slate-100 text-slate-700 text-center";
                 }
-            } else if (currentStepIdx === 1) { // A1 SOGGETTO
-                const a1Val = document.getElementById("input-a1").value.trim().toLowerCase();
-                const a1CaseVal = document.getElementById("input-a1-case").value.trim().toLowerCase();
-                const a1DeclVal = document.getElementById("input-a1-decl").value.trim().toLowerCase();
-
-                if (a1Val === cData.a1.toLowerCase() && a1CaseVal.includes("nominativ") && a1DeclVal.length > 2) {
-                    isOk = true;
-                } else {
-                    showFeedback("Ricontrolla il Soggetto A1: dev'essere al Nominativo e devi inserire la sua declinazione per esteso nel riquadro rosa (es. discipula, discipulae).", false);
-                }
-            } else if (currentStepIdx === 2) { // A2 OGGETTO
-                const a2Val = document.getElementById("input-a2").value.trim().toLowerCase();
-                const expectedA2 = cData.a2.toLowerCase();
-
-                if (a2Val === expectedA2 || (expectedA2 === "nessuno" && (a2Val === "" || a2Val === "nessuno"))) {
-                    isOk = true;
-                } else {
-                    showFeedback(`Ricontrolla l'Oggetto A2: la risposta attesa è "${cData.a2}".`, false);
-                }
-            } else if (currentStepIdx === 3) { // A3 TERMINE
-                const a3Val = document.getElementById("input-a3").value.trim().toLowerCase();
-                const expectedA3 = cData.a3.toLowerCase();
-
-                if (a3Val === expectedA3 || (expectedA3 === "nessuno" && (a3Val === "" || a3Val === "nessuno"))) {
-                    isOk = true;
-                } else {
-                    showFeedback(`Ricontrolla il Termine A3: la risposta attesa è "${cData.a3}".`, false);
-                }
-            } else if (currentStepIdx === 4) { // TRADUZIONE
-                const transVal = document.getElementById("input-translation").value.trim().toLowerCase();
-                if (transVal.length > 5) {
-                    isOk = true;
-                } else {
-                    showFeedback("Inserisci una traduzione completa in italiano!", false);
-                }
-            } else if (currentStepIdx === 5) { // MINI TEST CASI
-                const qList = cData.caseQuestions || [];
-                let correctCount = 0;
-                
-                qList.forEach((qObj, qIdx) => {
-                    const ansInput = document.getElementById(`input-case-test-${qIdx}`);
-                    if (ansInput && ansInput.value.trim().length > 0) {
-                        correctCount++;
-                    }
-                });
-
-                if (correctCount === qList.length) {
-                    isOk = true;
-                } else {
-                    showFeedback("Rispondi a tutte le domande dell'esercizio sui casi!", false);
-                }
-            }
-
-            if (isOk) {
-                score += 15;
-                document.getElementById("score-display").innerText = score;
-                showFeedback("Risposta corretta! Eccellente lavoro di analisi.", true);
-                document.getElementById("check-btn").classList.add("hidden");
-
-                if (currentStepIdx < 5) {
-                    document.getElementById("next-btn").classList.remove("hidden");
-                } else {
-                    if (currentCaseIdx < cases.length - 1) {
-                        document.getElementById("next-case-btn").classList.remove("hidden");
-                    } else {
-                        showFeedback("Fantastico! Hai completato tutte le frasi e i relativi esercizi sui casi!", true);
-                    }
-                }
-            }
+            });
+            renderMindmapStage();
         }
 
-        function nextStep() {
-            if (currentStepIdx < 5) {
-                currentStepIdx++;
-                renderStep();
-                updateProgressBar();
-            }
+        function updateTextSize(val) {
+// ... existing code ... -->
+        function updateNodeColors() {
+            state.centerBg = document.getElementById('picker-center-bg').value;
+            state.nodeBg = document.getElementById('picker-node-bg').value;
+            state.nodeBorder = document.getElementById('picker-node-border').value;
+            renderMindmapStage();
         }
 
-        function previousStep() {
-            if (currentStepIdx > 0) {
-                currentStepIdx--;
-                renderStep();
-                updateProgressBar();
-            }
-        }
-
-        function loadNextCase() {
-            loadCase(currentCaseIdx + 1);
-        }
-
-        function updateProgressBar() {
-            const progress = ((currentStepIdx + 1) / 6) * 100;
-            document.getElementById("progress-bar").style.width = `${progress}%`;
-        }
-
-        function showFeedback(msg, isSuccess) {
-            const box = document.getElementById("feedback-box");
-            box.classList.remove("hidden", "bg-emerald-950/90", "border-emerald-700", "text-emerald-200", "bg-rose-950/90", "border-rose-700", "text-rose-200");
-            
-            if (isSuccess) {
-                box.classList.add("bg-emerald-950/90", "border", "border-emerald-700", "text-emerald-200");
-                box.innerHTML = `<i class="fa-solid fa-circle-check mr-2 text-emerald-400"></i> ${msg}`;
-            } else {
-                box.classList.add("bg-rose-950/90", "border", "border-rose-700", "text-rose-200");
-                box.innerHTML = `<i class="fa-solid fa-circle-xmark mr-2 text-rose-400"></i> ${msg}`;
-            }
-        }
-
-        function hideFeedback() {
-            document.getElementById("feedback-box").classList.add("hidden");
-        }
-
-        function showHint() {
-            const cData = cases[currentCaseIdx];
-            document.getElementById("hint-content").innerHTML = cData.dictionary;
-            document.getElementById("hint-modal").classList.remove("hidden");
-        }
-
-        function closeHint() {
-            document.getElementById("hint-modal").classList.add("hidden");
-        }
-
-        // Creator Modal Functions
-        function openCreatorModal() {
-            document.getElementById("creator-modal").classList.remove("hidden");
-        }
-
-        function closeCreatorModal() {
-            document.getElementById("creator-modal").classList.add("hidden");
-        }
-
-        function saveCustomSentence(e) {
-            e.preventDefault();
-            const latinText = document.getElementById("custom-latin").value.trim();
-            const pv = document.getElementById("custom-pv").value.trim();
-            const pvDecl = document.getElementById("custom-pv-decl").value.trim();
-            const a1 = document.getElementById("custom-a1").value.trim();
-            const a1Decl = document.getElementById("custom-a1-decl").value.trim();
-            const a2 = document.getElementById("custom-a2").value.trim() || "nessuno";
-            const a2Decl = document.getElementById("custom-a2-decl").value.trim() || "-";
-            const a3 = document.getElementById("custom-a3").value.trim() || "nessuno";
-            const a3Decl = document.getElementById("custom-a3-decl").value.trim() || "-";
-            const translation = document.getElementById("custom-translation").value.trim();
-            const qText = document.getElementById("custom-case-q").value.trim();
-            const aText = document.getElementById("custom-case-a").value.trim();
-
-            const newCase = {
-                id: Date.now(),
-                latin: latinText,
-                pv: pv,
-                pvDecl: pvDecl,
-                a1: a1,
-                a1Case: "Nominativo",
-                a1Decl: a1Decl,
-                a2: a2,
-                a2Case: a2 !== "nessuno" ? "Accusativo" : "-",
-                a2Decl: a2Decl,
-                a3: a3,
-                a3Case: a3 !== "nessuno" ? "Dativo" : "-",
-                a3Decl: a3Decl,
-                dictionary: `Note grammaticali per la frase inserita.`,
-                translation: translation,
-                caseQuestions: [
-                    { question: qText, answer: aText }
-                ]
-            };
-
-            cases.push(newCase);
-            saveDatabase();
-            closeCreatorModal();
-            document.getElementById("creator-form").reset();
-            loadCase(cases.length - 1);
-            showFeedback("Nuova frase creata con successo con le domande sui casi!", true);
-        }
-    </script>
-</body>
-</html>
+        function setCanvasBackground(pattern) {
+// ... existing code ... -->
